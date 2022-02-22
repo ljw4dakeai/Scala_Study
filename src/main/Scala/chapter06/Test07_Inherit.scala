@@ -5,6 +5,25 @@ object Test07_Inherit {
     val student1 = new Student7("zoujiahao", 20)
     println("=======================")
     val student2 = new Student7("zoujiahao", 20, 1905)
+
+    student1.printerInfo()
+    student2.printerInfo()
+    println("=======================")
+    val teacher = new Teacher()
+    teacher.printerInfo()
+    println("=======================")
+    //动态绑定方法 == 多态
+    def personInfo(person: Person7): Unit = {
+      person.printerInfo()
+    }
+
+    personInfo(student1)
+    personInfo(teacher)
+
+
+
+
+
   }
 }
 
@@ -40,4 +59,11 @@ class Student7(name: String, age: Int) extends Person7(){
     println(s"student: name: ${name} age: ${age} school: ${stuNum}")
   }
 
+}
+
+
+class Teacher extends Person7{
+  override def printerInfo(): Unit ={
+    println("teacher")
+  }
 }
