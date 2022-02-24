@@ -60,7 +60,8 @@ object Test01_ImmutableArray {
 
 
     val array4 = array2.+:(15, 20)
-    val array6 = 20 +: array2
+    val array6 = 15 +: 20 +: array2
     println(array4.mkString(" "))
+    println(array6.mkString(" "))
   }
 }
