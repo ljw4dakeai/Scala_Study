@@ -31,6 +31,7 @@ object Test11_RDD_Fuction_TransPatrition {
       rdd.saveAsTextFile("src/main/Spark/chapter05/output")
     val mapRdd = rdd.map(_*2)
     mapRdd.saveAsTextFile("src/main/Spark/chapter05/output1")
+
     sc.stop()
   }
 }
