@@ -130,21 +130,55 @@ object Test13_RDD_Fuction_TransKeyValue {
 
 //6.conbineByKey
 
-    //需要三个参数
-    //  1.相同的Key进行数据转换，实现操作
-    //  2.分区内的计算规则
-    //  3.分区见的计算规则
+//    //需要三个参数
+//    //  1.相同的Key进行数据转换，实现操作
+//    //  2.分区内的计算规则
+//    //  3.分区见的计算规则
+//
+//    sc.makeRDD(List(
+//      ("a",1), ("b", 2), ("a", 3), ("b", 4)
+//    ), 2)
+//      .combineByKey(
+//        v => (v, 1),
+//        (tuple: (Int, Int), v) => (tuple._1 + v , tuple._2 + 1), //(tuple._1 + v string后面数的和 ， tuple._v + 1 string的个数)
+//        (tuple1: (Int, Int), tuple2: (Int, Int)) => (tuple1._1 + tuple2._1, tuple1._2 + tuple2._2)
+//      )
+//      .collect()
+//      .foreach(println)
 
-    sc.makeRDD(List(
-      ("a",1), ("b", 2), ("a", 3), ("b", 4)
-    ), 2)
-      .combineByKey(
-        v => (v, 1),
-        (tuple: (Int, Int), v) => (tuple._1 + v , tuple._2 + 1), //(tuple._1 + v string后面数的和 ， tuple._v + 1 string的个数)
-        (tuple1: (Int, Int), tuple2: (Int, Int)) => (tuple1._1 + tuple2._1, tuple1._2 + tuple2._2)
-      )
+
+//7.join
+
+//    //  不同数据源，相同的key的value会连接在一起
+//    //          ，没有相同的kay就不会出现
+//    // key有多个相同的，会依次匹配，可能会出现笛卡尔集，内存溢出！
+//    val RDD1 = sc.makeRDD(List(("a",1),("b",2),("c",3) ))
+//    val RDD2 = sc.makeRDD(List(("q", 1), ("b",2), ("c",3)))
+//
+//    RDD1.join(RDD2)
+//      .collect()
+//      .foreach(println)
+
+
+//8.leftOuterJoin
+
+//    val RDD1 = sc.makeRDD(List(("a",1),("b",2),("c",3) ))
+//    val RDD2 = sc.makeRDD(List(("q", 1), ("b",2), ("c",3)))
+//    //以左边为主 (a (1, none) (b,(2,2)) (c, (3, 3)))
+//    RDD1.leftOuterJoin(RDD2)
+//      .collect()
+//      .foreach(println)
+
+//8.rightOuterJoin
+
+    val RDD1 = sc.makeRDD(List(("a",1),("b",2),("c",3) ))
+    val RDD2 = sc.makeRDD(List(("q", 1), ("b",2), ("c",3)))
+    //以左右边为主 (q (1, none) (b,(2,2)) (c, (3, 3)))
+    RDD1.rightOuterJoin(RDD2)
       .collect()
       .foreach(println)
+
+
     sc.stop()
 
   }
