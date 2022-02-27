@@ -91,37 +91,68 @@ object Test09_RDD_Fuction_Active {
 //    }
 
 
-//10.saveAsTextFile
-
-
-    sc.makeRDD(List(("a", 1), ("b", 1), ("a", 2)))
-      .saveAsTextFile("src/main/Spark/chapter05/saveAsTextFile")
-
-
-//10.saveAsObjectFile
-
-
-    sc.makeRDD(List(("a", 1), ("b", 1), ("a", 2)))
-      .saveAsObjectFile("src/main/Spark/chapter05/saveAsObjectFile")
-
-
-
-//10.saveAsSequenceFile
-
-    //要求必须为Kv类型的数据
-
-    sc.makeRDD(List(("a", 1), ("b", 1), ("a", 2)))
-      .saveAsSequenceFile("src/main/Spark/chapter05/saveAsSequenceFile")
+////10.saveAsTextFile
+//
+//
+//    sc.makeRDD(List(("a", 1), ("b", 1), ("a", 2)))
+//      .saveAsTextFile("src/main/Spark/chapter05/saveAsTextFile")
+//
+//
+////10.saveAsObjectFile
+//
+//
+//    sc.makeRDD(List(("a", 1), ("b", 1), ("a", 2)))
+//      .saveAsObjectFile("src/main/Spark/chapter05/saveAsObjectFile")
+//
+//
+//
+////10.saveAsSequenceFile
+//
+//    //要求必须为Kv类型的数据
+//
+//    sc.makeRDD(List(("a", 1), ("b", 1), ("a", 2)))
+//      .saveAsSequenceFile("src/main/Spark/chapter05/saveAsSequenceFile")
 
 
 //11.foreach
 
+//    //算子：Operator(操作)
+//    //     RDD方法和Scala集合对象方法不一样
+//    //     集合对象方法是在同一个节点完成的。
+//    //     RDD方法可以将计算逻辑发送给Executor端（分布式节点）并行执行
+//    //     RDD-> 算子（方法外部操作都在Driver中执行），方法内部逻辑都在Executor端执行
+//
+//    //foreach driver端内存集合循环遍历 发送给executor后采集回来执行打印
+//    sc.makeRDD(List(("a", 1), ("b", 1), ("a", 2)))
+//      .collect()
+//      .foreach(println)
+//    println("===============")
+//
+//
+//    sc.makeRDD(List(("a", 1), ("b", 1), ("a", 2)))
+//      .foreach(println)
 
-
-
-
+    val User = new User()
+    //Task not serializable -> java.io.NotSerializableException: chapter05.User
+    //Drive => Executor 传输需要
+    //RDD算子中，会包涵闭包操作，会进行检测功能 ->闭包检测
+    sc.makeRDD(List(1, 2, 3, 4))
+      .foreach(num => {//executor端内存中进行 数据打印
+        println("age = " + (num + User.age))
+      })
 
 
     sc.stop()
   }
+}
+
+
+////不序列化就会报错
+//class User() extends Serializable {
+//  var age = 30
+//}
+
+//样例类在编译时会自动混入序列化特质（实现序列化接口）
+case class User(){
+  var age = 30
 }
